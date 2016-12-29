@@ -7,9 +7,11 @@ library(plyr)
   
   rawFilePath <- "../data/raw";
   
+
   estadoEstacionesBicisUrl <- "https://recursos-data.buenosaires.gob.ar/ckan2/ecobici/estado-ecobici.xml";
   estadoEstacionesBicisRawFile <- paste(rawFilePath, "estado-ecobici.xml", sep = "/");
-  downloadFile(estadoEstacionesBicisUrl, estadoEstacionesBicisRawFile)
+  #downloadFile(estadoEstacionesBicisUrl, estadoEstacionesBicisRawFile)
+  download.file(estadoEstacionesBicisUrl, estadoEstacionesBicisRawFile)
   
   estadoEstacionesBicisDoc <- xmlParse(file=estadoEstacionesBicisRawFile);
   
@@ -38,3 +40,9 @@ library(plyr)
   names(estadoEstacionesBicisDf)[idColumnasConNA]
   
   estadoEstacionesBicisDf$bicicletaDisponibles <- as.numeric(estadoEstacionesBicisDf$bicicletaDisponibles)
+  estadoEstacionesBicisDf$fecha <- Sys.time()
+  
+  ifelse(exists("bicishistorico")==FALSE,(bicishistorico=data.frame()),"no hago nada")
+  
+  bicishistorico <- rbind(bicishistorico,estadoEstacionesBicisDf)
+  
